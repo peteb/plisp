@@ -1,6 +1,7 @@
 #include "object.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 static const char *const obj_type_strtab[] = {
   "O_BLOB",
@@ -12,6 +13,29 @@ object_t *obj_create(obj_type tag) {
   new_obj->type = tag;
   new_obj->members = NULL;
   return new_obj;
+}
+
+object_t *obj_add_slot(object_t *obj, const char *id, object_t *value) {
+  slot_t *node = obj->members;
+  if (!node) {
+	/* we don't have any members at all */
+	node = obj->members = (slot_t *)malloc(sizeof(slot_t));
+  }
+  else {
+	slot_t *next = node;
+	slot_t *last = NULL;
+	while (next) {
+	  last = next;
+	  next = next->next;
+	}
+
+	node = last->next = (slot_t *)malloc(sizeof(slot_t));
+  }
+  
+  node->id = strdup(id);
+  node->value = value;
+  
+  return value;
 }
 
 static void obj_print_rec(object_t *obj, int level) {
@@ -34,7 +58,4 @@ static void obj_print_rec(object_t *obj, int level) {
 
 void obj_print(object_t *obj) {
   obj_print_rec(obj, 0);
-/*   printf("-- %p ------------------\n", obj); */
-/*   printf("type: %x\n", obj->type); */
-  
 }
