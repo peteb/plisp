@@ -1,5 +1,5 @@
 #ifndef PLISP_OBJECT_H
-#define PLSIP_OBJECT_H
+#define PLISP_OBJECT_H
 
 typedef enum {
   O_BLOB,
@@ -17,7 +17,7 @@ typedef struct object {
   struct slot *members;
 } object_t;
 
-object_t *obj_create(obj_type tag);
+object_t *obj_create();
 void      obj_print(object_t *obj);
 object_t *obj_add_slot(object_t *obj, const char *id, object_t *value);
 object_t *obj_get_slot(object_t *obj, const char *id);

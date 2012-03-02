@@ -2,20 +2,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 static const char *const obj_type_strtab[] = {
   "O_BLOB",
   "O_SYMBOL"
 };
 
-object_t *obj_create(obj_type tag) {
+static object_t *obj_lookup_slot(object_t *obj, const char *id);
+
+object_t *obj_create() {
   object_t *new_obj = (object_t *)malloc(sizeof(object_t));
-  new_obj->type = tag;
+  new_obj->type = O_BLOB;
   new_obj->members = NULL;
   return new_obj;
 }
 
 object_t *obj_add_slot(object_t *obj, const char *id, object_t *value) {
+  assert(!obj_lookup_slot(obj, id) && "slot already defined");
+  
   slot_t *node = obj->members;
   if (!node) {
 	/* we don't have any members at all */
