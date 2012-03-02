@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
 
 
   object_t *l1 = lst_cons(sym_create("print"), lst_cons(sym_create("hello"), NULL));
-  
+  obj_print(l1);
+	
   return 0;
 }

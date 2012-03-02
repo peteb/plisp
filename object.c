@@ -85,7 +85,11 @@ static void obj_print_rec(object_t *obj, int level) {
   slot_t *node = obj->members;
   while (node) {
 	printf("%sslot '%s':\n", indent, node->id);
-	obj_print_rec(node->value, level + 1);
+	if (node->value)
+	  obj_print_rec(node->value, level + 1);
+	else
+	  printf("%s  (null)\n", indent);
+	
 	node = node->next;
   }
 }
