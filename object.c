@@ -38,6 +38,36 @@ object_t *obj_add_slot(object_t *obj, const char *id, object_t *value) {
   return value;
 }
 
+static object_t *obj_lookup_slot(object_t *obj, const char *id) {
+  slot_t *node = obj->members;
+  while (node) {
+	if (strcmp(node->id, id) == 0)
+	  return node->value;
+	
+	node = node->next;
+  }
+
+  return NULL;
+}
+
+static object_t *obj_get_delegate(object_t *obj) {
+  return obj_lookup_slot(obj, "delegate");
+}
+
+object_t *obj_get_slot(object_t *obj, const char *id) {
+  object_t *value;
+  while (obj) {
+	value = obj_lookup_slot(obj, id);
+	if (value)
+	  break;
+
+	obj = obj_get_delegate(obj);		
+  }
+  
+  return value;
+}
+
+
 static void obj_print_rec(object_t *obj, int level) {
   char indent[256] = {0};
   int i;
@@ -45,8 +75,7 @@ static void obj_print_rec(object_t *obj, int level) {
 	indent[i] = ' ';
   indent[i] = '\0';
 
-  printf("%sobject %p:\n", indent, obj);
-  printf("%stype %s (%x)\n", indent, obj_type_strtab[obj->type], obj->type);
+  printf("%sobject %p, type %s (%x)\n", indent, obj, obj_type_strtab[obj->type], obj->type);
 
   slot_t *node = obj->members;
   while (node) {

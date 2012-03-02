@@ -19,5 +19,7 @@ typedef struct object {
 
 object_t *obj_create(obj_type tag);
 void      obj_print(object_t *obj);
+object_t *obj_add_slot(object_t *obj, const char *id, object_t *value);
+object_t *obj_get_slot(object_t *obj, const char *id);
 
 #endif // !PLISP_OBJECT_H
