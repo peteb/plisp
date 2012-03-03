@@ -37,6 +37,11 @@ static object_t *apply(object_t *fun, object_t *args) {
   assert(fun && "can't apply null fun"); 
 
   if (OBJ_TYPE(fun) == O_CFUN) {
+    printf("FUN:\n");
+    obj_print(fun);
+    printf("ARGS:\n");
+    obj_print(args);
+    
     return cfun_apply(fun, args);
   }
   else {
@@ -67,7 +72,9 @@ object_t *eval(object_t *expr, object_t *env) {
   }
   
   if (OBJ_TYPE(expr) == O_SYMBOL) {
-    return obj_get_slot(env, sym_get_text(expr));
+    object_t *slot = obj_get_slot(env, sym_get_text(expr));
+    assert(slot && "couldn't look up symbol");
+    return slot;
   }
   else if (OBJ_TYPE(expr) == O_BLOB) {
     return apply(eval(sexp_fun(expr), env), eval_list(sexp_args(expr), env));
