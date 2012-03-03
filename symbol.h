@@ -8,7 +8,7 @@ typedef struct symbol {
   const char *sym;
 } symbol_t;
 
-object_t   *sym_create(const char *sym);
+object_t   *sym_create(const char *sym, int lazy);
 const char *sym_get_text(object_t *obj);
   
 #endif // !PLISP_SYMBOL_H

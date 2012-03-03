@@ -6,7 +6,8 @@
 
 static const char *const obj_type_strtab[] = {
   "O_BLOB",
-  "O_SYMBOL"
+  "O_SYMBOL",
+  "O_CFUN"
 };
 
 static object_t *obj_lookup_slot(object_t *obj, const char *id);
@@ -80,7 +81,9 @@ static void obj_print_rec(object_t *obj, int level) {
 	indent[i] = ' ';
   indent[i] = '\0';
 
-  printf("%sobject %p, type %s (%x)\n", indent, obj, obj_type_strtab[obj->type], obj->type);
+  printf("%sobject %p, type %s %s (%x)\n", indent, obj,
+		 obj_type_strtab[OBJ_TYPE(obj)],
+		 (obj->type & O_LAZY ? "O_LAZY" : ""), obj->type);
 
   slot_t *node = obj->members;
   while (node) {
@@ -95,5 +98,10 @@ static void obj_print_rec(object_t *obj, int level) {
 }
 
 void obj_print(object_t *obj) {
+  if (!obj) {
+	printf("(null)\n");
+	return;
+  }
+  
   obj_print_rec(obj, 0);
 }
