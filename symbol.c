@@ -10,7 +10,7 @@ object_t *sym_create(const char *sym, int lazy) {
   new_sym->sym = strdup(sym);
 
   if (lazy)
-	new_sym->header.type |= O_LAZY;
+    new_sym->header.type |= O_LAZY;
   
   return (object_t *)new_sym;
 }
