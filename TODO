@@ -1,0 +1,7 @@
+-*- org -*-
+
+TODO
+====
+* lexical scoping
+* tail recursion optimization
+* garbage collection  
