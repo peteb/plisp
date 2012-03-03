@@ -40,19 +40,38 @@ static object_t *apply(object_t *fun, object_t *args) {
 	return cfun_apply(fun, args);
   }
   else {
+	object_t *fun_env = lst_first(fun);
+	object_t *formals = lst_first(lst_second(fun));
+	object_t *body = lst_second(lst_second(fun));
+	object_t *new_env = obj_create();
+	obj_add_slot(new_env, "delegate", fun_env);
 
+	object_t *formal = formals;
+	object_t *arg = args;
+
+	while (arg && formal) {
+	  obj_add_slot(new_env, sym_get_text(lst_first(formal)), lst_first(arg));
+	  formal = lst_second(formal);
+	  arg = lst_second(arg);
+	}
+
+	return eval(body, new_env);
   }
   
   return NULL;
 }
 
 object_t *eval(object_t *expr, object_t *env) {
-  if (OBJ_TYPE(expr) == O_SYMBOL && !(expr->type & O_LAZY)) {
+  if (expr->type & O_LAZY) {
+	return expr;
+  }
+  
+  if (OBJ_TYPE(expr) == O_SYMBOL) {
 	return obj_get_slot(env, sym_get_text(expr));
   }
   else if (OBJ_TYPE(expr) == O_BLOB) {
 	return apply(eval(sexp_fun(expr), env), eval_list(sexp_args(expr), env));
   }
 
-  return expr;
+  return NULL;
 }
