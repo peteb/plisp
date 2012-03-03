@@ -19,21 +19,27 @@ extern object_t *env;
 
 %type <obj> expr
 %type <obj> cons
+%type <obj> q_cons
 
 %%
 
-line: expr                  {obj_print($1); eval($1, env); }   
+line: expr                  {eval($1, env); }   
       | line expr           {eval($2, env); }
-	  ;
+      ;
 
-expr:  SYMBOL               {$$ = sym_create(yylval.text, 0); }
-       | QUOTE SYMBOL       {$$ = sym_create(yylval.text, 1); }
-       | LPAREN cons RPAREN {$$ = $2}
+expr:  SYMBOL                       {$$ = sym_create(yylval.text, 0); }
+       | QUOTE SYMBOL               {$$ = sym_create(yylval.text, 1); }
+       | LPAREN cons RPAREN         {$$ = $2}
+       | QUOTE LPAREN q_cons RPAREN {$$ = $3}
        ;
 
 cons:  expr                 {$$ = lst_cons($1, NULL); }
        | expr cons          {$$ = lst_cons($1, $2); }
        ;
+
+q_cons:  expr                 {$$ = lst_cons_lazy($1, NULL); }
+         | expr q_cons        {$$ = lst_cons_lazy($1, $2); }
+         ;
 
 %%
 

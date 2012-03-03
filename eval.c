@@ -33,26 +33,24 @@ static object_t *eval_list(object_t *list, object_t *env) {
   return new_list;
 }
 
-static object_t *apply(object_t *fun, object_t *args) {
+static object_t *apply(object_t *fun, object_t *args, object_t *csenv) {
   assert(fun && "can't apply null fun"); 
 
   if (OBJ_TYPE(fun) == O_CFUN) {
-    printf("FUN:\n");
-    obj_print(fun);
-    printf("ARGS:\n");
-    obj_print(args);
-    
-    return cfun_apply(fun, args);
+    return cfun_apply(fun, csenv, args);
   }
   else {
-    object_t *fun_env = lst_first(fun);
-    object_t *formals = lst_first(lst_second(fun));
-    object_t *body = lst_second(lst_second(fun));
+    // TODO: lam_get_env(...), lam_get_formals()..
+    // TODO: lexical scoping, not dynamic...
+    
+    object_t *formals = lst_first(fun);
+    object_t *body = lst_first(lst_second(fun));
     object_t *new_env = obj_create();
-    obj_set_delegate(new_env, fun_env);
+    obj_set_delegate(new_env, csenv);
 
     object_t *formal = formals;
     object_t *arg = args;
+
 
     while (arg && formal) {
       obj_add_slot(new_env, sym_get_text(lst_first(formal)), lst_first(arg));
@@ -74,10 +72,11 @@ object_t *eval(object_t *expr, object_t *env) {
   if (OBJ_TYPE(expr) == O_SYMBOL) {
     object_t *slot = obj_get_slot(env, sym_get_text(expr));
     assert(slot && "couldn't look up symbol");
-    return slot;
+    object_t *val = slot;
+    return val;
   }
   else if (OBJ_TYPE(expr) == O_BLOB) {
-    return apply(eval(sexp_fun(expr), env), eval_list(sexp_args(expr), env));
+    return apply(eval(sexp_fun(expr), env), eval_list(sexp_args(expr), env), env);
   }
 
   return NULL;

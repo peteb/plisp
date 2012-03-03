@@ -11,7 +11,7 @@ object_t *cfun_create(cfun_ptr_t fun) {
   return (object_t *)new_cfun;
 }
 
-object_t *cfun_apply(object_t *obj, object_t *args) {
+object_t *cfun_apply(object_t *obj, object_t *env, object_t *args) {
   assert(OBJ_TYPE(obj) == O_CFUN && "trying to apply non-cfun");
-  return ((cfun_t *)obj)->fun(args);
+  return ((cfun_t *)obj)->fun(env, args);
 }

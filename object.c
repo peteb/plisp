@@ -1,4 +1,5 @@
 #include "object.h"
+#include "symbol.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -85,6 +86,10 @@ static void obj_print_rec(object_t *obj, int level) {
 		 obj_type_strtab[OBJ_TYPE(obj)],
 		 (obj->type & O_LAZY ? "O_LAZY" : ""), obj->type);
 
+
+  if (OBJ_TYPE(obj) == O_SYMBOL)
+	printf("value: %s\n", sym_get_text(obj));
+  
   slot_t *node = obj->members;
   while (node) {
 	printf("%sslot '%s':\n", indent, node->id);
