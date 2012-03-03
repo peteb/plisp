@@ -49,7 +49,7 @@ static object_t *apply(object_t *fun, object_t *args) {
     object_t *formals = lst_first(lst_second(fun));
     object_t *body = lst_second(lst_second(fun));
     object_t *new_env = obj_create();
-    obj_add_slot(new_env, "delegate", fun_env);
+    obj_set_delegate(new_env, fun_env);
 
     object_t *formal = formals;
     object_t *arg = args;

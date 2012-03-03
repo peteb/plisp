@@ -105,3 +105,7 @@ void obj_print(object_t *obj) {
   
   obj_print_rec(obj, 0);
 }
+
+void obj_set_delegate(object_t *obj, object_t *deleg) {
+  obj_add_slot(obj, "delegate", deleg);
+}
