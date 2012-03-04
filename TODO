@@ -6,4 +6,5 @@ TODO
 * tail recursion optimization
 * garbage collection  
 * fix bug in parser; improve REPL
+* tests (unit tests, system tests)
   
