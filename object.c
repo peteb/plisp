@@ -25,18 +25,18 @@ object_t *obj_add_slot(object_t *obj, const char *id, object_t *value) {
   
   slot_t *node = obj->members;
   if (!node) {
-	/* we don't have any members at all */
-	node = obj->members = (slot_t *)malloc(sizeof(slot_t));
+    /* we don't have any members at all */
+    node = obj->members = (slot_t *)malloc(sizeof(slot_t));
   }
   else {
-	slot_t *next = node;
-	slot_t *last = NULL;
-	while (next) {
-	  last = next;
-	  next = next->next;
-	}
+    slot_t *next = node;
+    slot_t *last = NULL;
+    while (next) {
+      last = next;
+      next = next->next;
+    }
 
-	node = last->next = (slot_t *)malloc(sizeof(slot_t));
+    node = last->next = (slot_t *)malloc(sizeof(slot_t));
   }
   
   node->id = strdup(id);
@@ -48,10 +48,10 @@ object_t *obj_add_slot(object_t *obj, const char *id, object_t *value) {
 static object_t *obj_lookup_slot(object_t *obj, const char *id) {
   slot_t *node = obj->members;
   while (node) {
-	if (strcmp(node->id, id) == 0)
-	  return node->value;
+    if (strcmp(node->id, id) == 0)
+      return node->value;
 	
-	node = node->next;
+    node = node->next;
   }
 
   return NULL;
@@ -64,9 +64,9 @@ static object_t *obj_get_delegate(object_t *obj) {
 object_t *obj_get_slot(object_t *obj, const char *id) {
   object_t *value;
   while (obj) {
-	value = obj_lookup_slot(obj, id);
-	if (value)
-	  break;
+    value = obj_lookup_slot(obj, id);
+    if (value)
+      break;
 
 	obj = obj_get_delegate(obj);		
   }
@@ -79,33 +79,33 @@ static void obj_print_rec(object_t *obj, int level) {
   char indent[256] = {0};
   int i;
   for (i = 0; i < level * 2 && i < 255; ++i)
-	indent[i] = ' ';
+    indent[i] = ' ';
   indent[i] = '\0';
 
   printf("%sobject %p, type %s %s (%x)\n", indent, obj,
-		 obj_type_strtab[OBJ_TYPE(obj)],
-		 (obj->type & O_LAZY ? "O_LAZY" : ""), obj->type);
+         obj_type_strtab[OBJ_TYPE(obj)],
+         (obj->type & O_LAZY ? "O_LAZY" : ""), obj->type);
 
 
   if (OBJ_TYPE(obj) == O_SYMBOL)
-	printf("value: %s\n", sym_get_text(obj));
+    printf("value: %s\n", sym_get_text(obj));
   
   slot_t *node = obj->members;
   while (node) {
-	printf("%sslot '%s':\n", indent, node->id);
-	if (node->value)
-	  obj_print_rec(node->value, level + 1);
-	else
-	  printf("%s  (null)\n", indent);
+    printf("%sslot '%s':\n", indent, node->id);
+    if (node->value)
+      obj_print_rec(node->value, level + 1);
+    else
+      printf("%s  (null)\n", indent);
 	
-	node = node->next;
+    node = node->next;
   }
 }
 
 void obj_print(object_t *obj) {
   if (!obj) {
-	printf("(null)\n");
-	return;
+    printf("(null)\n");
+    return;
   }
   
   obj_print_rec(obj, 0);
