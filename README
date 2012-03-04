@@ -18,9 +18,11 @@ Examples
 (define 'name 'peter)
 (print name)
 peter
-(define 'my_print '(('x) (print x)))
+(define 'my_print '((x) (print x)))
 (my_print 'hello)
 hello
+('((x) (print x)) 'hejsan)
+hejsan
 
 Root environment
 ----------------
