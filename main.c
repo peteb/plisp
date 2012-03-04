@@ -17,7 +17,7 @@ object_t *ENV_define(object_t *env, object_t *args) {
 
   obj_add_slot(env, sym_get_text(name), value);
   
-  return args;
+  return value;
 }
 
 object_t *env = NULL;
