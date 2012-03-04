@@ -9,7 +9,9 @@ Right now, it supports dynamic scoping. This is going to change.
 
 Building
 --------
-cmake . && make
+Requires bison, flex and gcc:
+
+./make
 
 Examples
 --------
