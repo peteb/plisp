@@ -1,4 +1,35 @@
 README
 ======
+This is my Lisp implementation. Compiling the project results in a REPL where
+you can execute minimalistic Lisp code. I'm saying minimalistic because there's
+nothing but lists, quoted lists, symbols and quoted symbols!
+There's no extra syntax for defines, lambdas, etc. Lazy evaulation is done by
+passing around quoted expressions.
+Right now, it supports dynamic scoping. This is going to change.
 
-This is my LISP implementation. Just for fun.
+Building
+--------
+cmake . && make
+
+Examples
+--------
+(define 'name 'peter)
+(print name)
+peter
+(define 'my_print '(('x) (print x)))
+(my_print 'hello)
+hello
+
+Root environment
+----------------
+The root environment consists of these functions (which can be used everywhere):
+
+define NAME VALUE
+  binds a value in the current environment to a value (remember, code is value)
+  
+print VALUE
+  prints the value of a symbol to stdout
+
+  
+  
+
