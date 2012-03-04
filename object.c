@@ -78,7 +78,7 @@ object_t *obj_get_slot(object_t *obj, const char *id) {
 static void obj_print_rec(object_t *obj, int level) {
   char indent[256] = {0};
   int i;
-  for (i = 0; i < level * 2 && i < 255; ++i)
+  for (i = 0; i < level * 2 && i < sizeof indent; ++i)
     indent[i] = ' ';
   indent[i] = '\0';
 
