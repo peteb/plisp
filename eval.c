@@ -40,7 +40,7 @@ static object_t *apply(object_t *fun, object_t *args, object_t *csenv) {
     return cfun_apply(fun, csenv, args);
   }
   else {
-    // TODO: lam_get_env(...), lam_get_formals()..
+    // TODO: lam_get_definition  (for formals, env, body..)
     // TODO: lexical scoping, not dynamic...
     
     object_t *formals = lst_first(fun);
