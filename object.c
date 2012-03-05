@@ -68,7 +68,7 @@ object_t *obj_get_slot(object_t *obj, const char *id) {
     if (value)
       break;
 
-	obj = obj_get_delegate(obj);		
+    obj = obj_get_delegate(obj);		
   }
   
   return value;
