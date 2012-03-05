@@ -5,13 +5,15 @@
 #include <string.h>
 #include <assert.h>
 
-static const char *const obj_type_strtab[] = {
+static const char *const 
+obj_type_strtab[] = {
   "O_BLOB",
   "O_SYMBOL",
   "O_CFUN"
 };
 
-static object_t *obj_lookup_slot(object_t *obj, const char *id);
+static object_t *
+obj_lookup_slot(object_t *obj, const char *id);
 
 object_t *
 obj_create() {
