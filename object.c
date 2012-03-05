@@ -13,14 +13,16 @@ static const char *const obj_type_strtab[] = {
 
 static object_t *obj_lookup_slot(object_t *obj, const char *id);
 
-object_t *obj_create() {
+object_t *
+obj_create() {
   object_t *new_obj = (object_t *)malloc(sizeof(object_t));
   new_obj->type = O_BLOB;
   new_obj->members = NULL;
   return new_obj;
 }
 
-object_t *obj_add_slot(object_t *obj, const char *id, object_t *value) {
+object_t *
+obj_add_slot(object_t *obj, const char *id, object_t *value) {
   assert(!obj_lookup_slot(obj, id) && "slot already defined");
   
   slot_t *node = obj->members;
@@ -45,7 +47,8 @@ object_t *obj_add_slot(object_t *obj, const char *id, object_t *value) {
   return value;
 }
 
-static object_t *obj_lookup_slot(object_t *obj, const char *id) {
+static object_t *
+obj_lookup_slot(object_t *obj, const char *id) {
   slot_t *node = obj->members;
   while (node) {
     if (strcmp(node->id, id) == 0)
@@ -57,11 +60,13 @@ static object_t *obj_lookup_slot(object_t *obj, const char *id) {
   return NULL;
 }
 
-static object_t *obj_get_delegate(object_t *obj) {
+static object_t *
+obj_get_delegate(object_t *obj) {
   return obj_lookup_slot(obj, "delegate");
 }
 
-object_t *obj_get_slot(object_t *obj, const char *id) {
+object_t *
+obj_get_slot(object_t *obj, const char *id) {
   object_t *value;
   while (obj) {
     value = obj_lookup_slot(obj, id);
@@ -75,7 +80,8 @@ object_t *obj_get_slot(object_t *obj, const char *id) {
 }
 
 
-static void obj_print_rec(object_t *obj, int level) {
+static void 
+obj_print_rec(object_t *obj, int level) {
   char indent[256] = {0};
   int i;
   for (i = 0; i < level * 2 && i < sizeof indent; ++i)
@@ -102,7 +108,8 @@ static void obj_print_rec(object_t *obj, int level) {
   }
 }
 
-void obj_print(object_t *obj) {
+void 
+obj_print(object_t *obj) {
   if (!obj) {
     printf("(null)\n");
     return;
@@ -111,6 +118,7 @@ void obj_print(object_t *obj) {
   obj_print_rec(obj, 0);
 }
 
-void obj_set_delegate(object_t *obj, object_t *deleg) {
+void 
+obj_set_delegate(object_t *obj, object_t *deleg) {
   obj_add_slot(obj, "delegate", deleg);
 }
