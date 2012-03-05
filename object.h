@@ -21,10 +21,19 @@ typedef struct object {
 
 #define OBJ_TYPE(obj) ((obj)->type & 0x0F)
 
-object_t *obj_create();
-void      obj_print(object_t *obj);
-object_t *obj_add_slot(object_t *obj, const char *id, object_t *value);
-object_t *obj_get_slot(object_t *obj, const char *id);
-void      obj_set_delegate(object_t *obj, object_t *deleg);
+object_t *
+obj_create();
+
+void
+obj_print(object_t *obj);
+
+object_t *
+obj_add_slot(object_t *obj, const char *id, object_t *value);
+
+object_t *
+obj_get_slot(object_t *obj, const char *id);
+
+void
+obj_set_delegate(object_t *obj, object_t *deleg);
 
 #endif // !PLISP_OBJECT_H
