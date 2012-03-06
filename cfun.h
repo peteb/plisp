@@ -10,7 +10,10 @@ typedef struct cfun {
   cfun_ptr_t fun;
 } cfun_t;
 
-object_t *cfun_create(cfun_ptr_t fun);
-object_t *cfun_apply(object_t *obj, object_t *env, object_t *args);
+object_t *
+cfun_create(cfun_ptr_t fun);
+
+object_t *
+cfun_apply(object_t *obj, object_t *env, object_t *args);
 
 #endif // !PLISP_CFUN_H

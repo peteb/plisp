@@ -6,15 +6,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static object_t *sexp_fun(object_t *expr) {
+static object_t *
+sexp_fun(object_t *expr) {
   return lst_first(expr);
 }
 
-static object_t *sexp_args(object_t *expr) {
+static object_t *
+sexp_args(object_t *expr) {
   return lst_second(expr);
 }
 
-static object_t *eval_list(object_t *list, object_t *env) {
+static object_t *
+eval_list(object_t *list, object_t *env) {
   if (!list) {
     return NULL;
   }
@@ -33,14 +36,15 @@ static object_t *eval_list(object_t *list, object_t *env) {
   return new_list;
 }
 
-static object_t *apply(object_t *fun, object_t *args, object_t *csenv) {
+static object_t *
+apply(object_t *fun, object_t *args, object_t *csenv) {
   assert(fun && "can't apply null fun"); 
 
   if (OBJ_TYPE(fun) == O_CFUN) {
     return cfun_apply(fun, csenv, args);
   }
   else {
-    // TODO: lam_get_env(...), lam_get_formals()..
+    // TODO: lam_get_definition  (for formals, env, body..)
     // TODO: lexical scoping, not dynamic...
     
     object_t *formals = lst_first(fun);
@@ -64,7 +68,8 @@ static object_t *apply(object_t *fun, object_t *args, object_t *csenv) {
   return NULL;
 }
 
-object_t *eval(object_t *expr, object_t *env) {
+object_t *
+eval(object_t *expr, object_t *env) {
   if (expr->type & O_LAZY) {
     return expr;
   }
