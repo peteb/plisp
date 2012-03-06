@@ -2,6 +2,7 @@
 #define PLISP_EVAL_H
 
 #include "object.h"
+#include <inttypes.h>
 
 object_t *eval(object_t *expr, object_t *env);
 

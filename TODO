@@ -7,4 +7,4 @@ TODO
 * garbage collection  
 * fix bug in parser; improve REPL
 * tests (unit tests, system tests)
-  
+* resolve (if 't 'hello 'bye) and (if 't '(...) '(...)) issue
