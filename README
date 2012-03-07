@@ -24,6 +24,8 @@ hello
 ('((x) (print x)) 'hejsan)
 hejsan
 
+(define 'or ((first 'second) (if first first (eval second))))
+
 Root environment
 ----------------
 The root environment consists of these functions (which can be used everywhere):

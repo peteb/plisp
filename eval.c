@@ -93,16 +93,19 @@ eval(object_t *expr, object_t *env) {
     uint64_t lazy_forms = 0;
     object_t *fun = eval(sexp_fun(expr), env);
     object_t *args = sexp_args(expr);
+    
     if (args) {
       if (OBJ_TYPE(fun) != O_CFUN) {
         /* this expects the list to be formatted like a lambda */
         object_t *formal = lst_first(fun);
         int pos = 0;
         while (formal) {
-          if (lst_first(formal)->type & O_LAZY)
-            lazy_forms |= (1 << pos++);
-          
+          if (lst_first(formal)->type & O_LAZY) {
+            assert(pos < 64 && "too late lazy formals");
+            lazy_forms |= (1 << pos);
+          }
           formal = lst_second(formal);
+          pos++;
         }
       }
       else {
