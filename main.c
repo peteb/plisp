@@ -6,9 +6,12 @@
 #include "eval.h"
 #include "cfun.h"
 
-object_t *ENV_print(object_t *env, object_t *args) {
-  if (!args)
+object_t *
+ENV_print(object_t *env, object_t *args) {
+  if (!args) {
+	printf("no args :(\n");
 	return args;
+  }
   
   /* print SYMBOL */
   if (OBJ_TYPE(lst_first(args)) == O_SYMBOL) {
@@ -20,7 +23,8 @@ object_t *ENV_print(object_t *env, object_t *args) {
   return lst_first(args);
 }
 
-object_t *ENV_define(object_t *env, object_t *args) {
+object_t *
+ENV_define(object_t *env, object_t *args) {
   /* define NAME VALUE */
   
   object_t *name = lst_first(args);
@@ -31,7 +35,8 @@ object_t *ENV_define(object_t *env, object_t *args) {
   return value;
 }
 
-object_t *ENV_if(object_t *env, object_t *args) {
+object_t *
+ENV_if(object_t *env, object_t *args) {
   /* if STATEMENT BODY ELSE */
 
   object_t *truth = lst_first(args);
@@ -47,13 +52,20 @@ object_t *ENV_if(object_t *env, object_t *args) {
   return (body ? eval(body, env) : sym_create("void", 1));
 }
 
+object_t *
+ENV_eval(object_t *env, object_t *args) {
+  return eval(lst_first(args), env);  
+}
+
 object_t *env = NULL;
 
-int main(int argc, char *argv[]) {
+int
+main(int argc, char *argv[]) {
   env = obj_create();
-  obj_add_slot(env, "print", cfun_create(ENV_print));
-  obj_add_slot(env, "define", cfun_create(ENV_define));
-  obj_add_slot(env, "if", cfun_create(ENV_if));
+  obj_add_slot(env, "print", cfun_create(ENV_print, 0x0));
+  obj_add_slot(env, "define", cfun_create(ENV_define, 0x2));
+  obj_add_slot(env, "if", cfun_create(ENV_if, 0x6));
+  obj_add_slot(env, "eval", cfun_create(ENV_eval, 0x0));
   //  obj_add_slot(env, "my_name", lst_cons(env, lst_cons(lst_cons(sym_create("x", 1), NULL), lst_cons(sym_create("print", 0), lst_cons(sym_create("x", 0), NULL)))));
 
   yyparse();

@@ -46,7 +46,7 @@ apply(object_t *fun, object_t *args, object_t *csenv) {
   if (OBJ_TYPE(fun) == O_CFUN) {
     return cfun_apply(fun, csenv, args);
   }
-  else {
+  else if (OBJ_TYPE(fun) == O_BLOB) {
     // TODO: lam_get_definition  (for formals, env, body..)
     // TODO: lexical scoping, not dynamic...
     
@@ -70,6 +70,9 @@ apply(object_t *fun, object_t *args, object_t *csenv) {
 
     return eval(body, new_env);
   }
+  else {
+    assert(!"can't apply this");
+  }
   
   return NULL;
 }
@@ -87,26 +90,29 @@ eval(object_t *expr, object_t *env) {
     return val;
   }
   else if (OBJ_TYPE(expr) == O_BLOB) {
-	uint64_t lazy_forms = 0;
-	object_t *fun = eval(sexp_fun(expr), env);
-	if (OBJ_TYPE(fun) != O_CFUN) {
-	  object_t *formal = lst_first(fun);
-	  int pos = 0;
-	  while (formal) {
-		if (lst_first(formal)->type & O_LAZY)
-		  lazy_forms |= (1 << pos++);
-		
-		formal = lst_second(formal);
-	  }
-	}
-
-	object_t *args = sexp_args(expr);
-	if (args) {
-	  args = eval_list(args, env, lazy_forms);
-	}
-	
+    uint64_t lazy_forms = 0;
+    object_t *fun = eval(sexp_fun(expr), env);
+    object_t *args = sexp_args(expr);
+    if (args) {
+      if (OBJ_TYPE(fun) != O_CFUN) {
+        object_t *formal = lst_first(fun);
+        int pos = 0;
+        while (formal) {
+          if (lst_first(formal)->type & O_LAZY)
+            lazy_forms |= (1 << pos++);
+          
+          formal = lst_second(formal);
+        }
+      }
+      else {
+        lazy_forms = cfun_get_lazy_forms(fun);
+      }
+      
+      args = eval_list(args, env, lazy_forms);
+    }
+    
     return apply(fun, args, env);
   }
-
+  
   return NULL;
 }
