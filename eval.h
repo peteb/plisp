@@ -4,6 +4,7 @@
 #include "object.h"
 #include <inttypes.h>
 
-object_t *eval(object_t *expr, object_t *env);
+object_t *
+eval(object_t *expr, object_t *env);
 
 #endif // !PLISP_EVAL_H

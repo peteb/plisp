@@ -28,12 +28,12 @@ eval_list(object_t *list, object_t *env, uint64_t lazy_forms) {
   object_t *old_node = list;
   
   while (old_node) {
-	object_t *old_val = lst_first(old_node);
+    object_t *old_val = lst_first(old_node);
     obj_add_slot(new_node, "first", (lazy_forms & 1 ? old_val : eval(old_val, env)));
     old_node = lst_second(old_node);
     new_node = obj_add_slot(new_node, "second",
                             (old_node ? obj_create() : NULL));
-	lazy_forms >>= 1;
+    lazy_forms >>= 1;
   }
 
   return new_list;
@@ -57,11 +57,11 @@ apply(object_t *fun, object_t *args, object_t *csenv) {
 
     object_t *formal = formals;
     object_t *arg = args;
-	uint64_t lazy_forms = 0;
-	int pos = 0;
+    uint64_t lazy_forms = 0;
+    int pos = 0;
 	
     while (arg && formal) {
-	  object_t *formal_def = lst_first(formal);
+      object_t *formal_def = lst_first(formal);
       obj_add_slot(new_env, sym_get_text(formal_def), lst_first(arg));
 
       formal = lst_second(formal);
