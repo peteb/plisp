@@ -19,6 +19,8 @@ typedef struct slot {
 typedef struct object {
   obj_type type;
   struct slot *members;
+  struct object *prev, *next;
+  unsigned last_mark;
 } object_t;
 
 #define OBJ_TYPE(obj) ((obj)->type & 0x0F)

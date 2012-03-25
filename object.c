@@ -15,11 +15,12 @@ obj_type_strtab[] = {
 static object_t *
 obj_lookup_slot(object_t *obj, const char *id);
 
-static unsigned long obj_alloc_count = 0;
+static unsigned long alloc_count = 0;
+static object_t *heap_head = NULL;
 
 static void
 obj_exit() {
-  printf("obj terminate, %lu objects leaked\n", obj_alloc_count);
+  printf("obj terminate, %lu objects leaked\n", alloc_count);
 }
 
 void
@@ -29,27 +30,38 @@ obj_init() {
 
 object_t *
 obj_alloc(size_t sz, obj_type type) {
+  gc_collect(heap_head);
+  
   object_t *new_o = (object_t *)malloc(sz);
   assert(new_o && "failed to allocate memory for object");
   new_o->type = type;
   new_o->members = NULL;
-  obj_alloc_count++;
+  new_o->last_mark = 0;
+  new_o->next = NULL;
+  new_o->prev = heap_head;
+  if (heap_head)
+	heap_head->next = new_o;
+  
+  heap_head = new_o;
+  alloc_count++;
+  printf("[mem_alloc type: %x sz: %lu] %p\n", type, sz, new_o);
   
   return new_o;
 }
 
 void
 obj_free(object_t *obj) {
+  // TODO: free slots also
+  // TODO: call destructor (ie; remove memory for symbol, etc)
+  // TODO: unlink object
+  printf("[mem_free at: %p]\n", obj);
   free(obj);
-  obj_alloc_count--;
+  alloc_count--;
 }
 
 
 object_t *
 obj_create() {
-//   object_t *new_obj = (object_t *)malloc(sizeof(object_t));
-//   new_obj->type = O_BLOB;
-//   new_obj->members = NULL;
   return obj_alloc(sizeof(object_t), O_BLOB);
 }
 

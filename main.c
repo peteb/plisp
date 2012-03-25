@@ -5,6 +5,7 @@
 #include "list.h"
 #include "eval.h"
 #include "cfun.h"
+#include "gc.h"
 
 object_t *
 ENV_print(object_t *env, object_t *args) {
@@ -65,12 +66,13 @@ main(int argc, char *argv[]) {
 
 
   env = obj_create();
+  gc_add_root(env);
   obj_add_slot(env, "print", cfun_create(ENV_print, 0x0));
   obj_add_slot(env, "define", cfun_create(ENV_define, 0x2));
   obj_add_slot(env, "if", cfun_create(ENV_if, 0x6));
   obj_add_slot(env, "eval", cfun_create(ENV_eval, 0x0));
   //  obj_add_slot(env, "my_name", lst_cons(env, lst_cons(lst_cons(sym_create("x", 1), NULL), lst_cons(sym_create("print", 0), lst_cons(sym_create("x", 0), NULL)))));
-
+  
   yyparse();
   return 0;
   
