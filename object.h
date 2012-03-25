@@ -8,7 +8,7 @@ typedef enum {
   O_SYMBOL  = 0x01,
   O_CFUN    = 0x02,
   O_LAZY    = 0x10,
-  O_MARKED = 0x20,
+  O_MARKED  = 0x20,
 } obj_type;
 
 typedef struct slot {
