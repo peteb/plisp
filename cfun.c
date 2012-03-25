@@ -1,12 +1,11 @@
 #include "cfun.h"
+#include "object.h"
 #include <stdlib.h>
 #include <assert.h>
 
 object_t *
 cfun_create(cfun_ptr_t fun, uint64_t lazy_forms) {
-  cfun_t *new_cfun = (cfun_t *)malloc(sizeof(cfun_t));
-  new_cfun->header.type = O_CFUN;
-  new_cfun->header.members = NULL;
+  cfun_t *new_cfun = (cfun_t *)obj_alloc(sizeof(cfun_t), O_CFUN);
   new_cfun->fun = fun;
   new_cfun->lazy_forms = lazy_forms;
   

@@ -1,13 +1,12 @@
 #include "symbol.h"
+#include "object.h"
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
 
 object_t *
 sym_create(const char *sym, int lazy) {
-  symbol_t *new_sym = (symbol_t *)malloc(sizeof(symbol_t));
-  new_sym->header.type = O_SYMBOL;
-  new_sym->header.members = NULL;
+  symbol_t *new_sym = (symbol_t *)obj_alloc(sizeof(symbol_t), O_SYMBOL);
   new_sym->sym = strdup(sym);
 
   if (lazy)
