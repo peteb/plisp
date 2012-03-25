@@ -1,6 +1,8 @@
 #ifndef PLISP_OBJECT_H
 #define PLISP_OBJECT_H
 
+#include "string.h"
+
 typedef enum {
   O_BLOB    = 0x00,
   O_SYMBOL  = 0x01,
@@ -21,6 +23,24 @@ typedef struct object {
 
 #define OBJ_TYPE(obj) ((obj)->type & 0x0F)
 
+/*
+ * Static initialization for obj subsystem.
+ */
+void
+obj_init();
+
+/*
+ * Allocates and sets the bare minimum of members for an object.
+ */
+object_t *
+obj_alloc(size_t sz, obj_type type);
+
+void
+obj_free(object_t *);
+
+/*
+ * Constructor for obj type.
+ */
 object_t *
 obj_create();
 

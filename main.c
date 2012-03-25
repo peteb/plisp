@@ -61,6 +61,9 @@ object_t *env = NULL;
 
 int
 main(int argc, char *argv[]) {
+  obj_init();
+
+
   env = obj_create();
   obj_add_slot(env, "print", cfun_create(ENV_print, 0x0));
   obj_add_slot(env, "define", cfun_create(ENV_define, 0x2));

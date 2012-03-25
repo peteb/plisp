@@ -15,12 +15,42 @@ obj_type_strtab[] = {
 static object_t *
 obj_lookup_slot(object_t *obj, const char *id);
 
+static unsigned long obj_alloc_count = 0;
+
+static void
+obj_exit() {
+  printf("obj terminate, %lu objects leaked\n", obj_alloc_count);
+}
+
+void
+obj_init() {
+  atexit(obj_exit);
+}
+
+object_t *
+obj_alloc(size_t sz, obj_type type) {
+  object_t *new_o = (object_t *)malloc(sz);
+  assert(new_o && "failed to allocate memory for object");
+  new_o->type = type;
+  new_o->members = NULL;
+  obj_alloc_count++;
+  
+  return new_o;
+}
+
+void
+obj_free(object_t *obj) {
+  free(obj);
+  obj_alloc_count--;
+}
+
+
 object_t *
 obj_create() {
-  object_t *new_obj = (object_t *)malloc(sizeof(object_t));
-  new_obj->type = O_BLOB;
-  new_obj->members = NULL;
-  return new_obj;
+//   object_t *new_obj = (object_t *)malloc(sizeof(object_t));
+//   new_obj->type = O_BLOB;
+//   new_obj->members = NULL;
+  return obj_alloc(sizeof(object_t), O_BLOB);
 }
 
 object_t *
