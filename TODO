@@ -2,10 +2,10 @@
 
 TODO
 ====
-* lexical scoping
-* tail recursion optimization
-* garbage collection  
-* fix bug in parser; improve REPL
-* tests (unit tests, system tests)
+* TODO lexical scoping
+* TODO tail recursion optimization
+* TODO garbage collection  
+* TODO fix bug in parser; improve REPL
+* TODO tests (unit tests, system tests)
 * DONE resolve (if 't 'hello 'bye) and (if 't '(...) '(...)) issue
-* module support
+* TODO module support
