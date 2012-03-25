@@ -36,7 +36,7 @@ gc_collect(object_t *node) {
   }
 
   while (node) {
-    printf("[gc_collect] obj %p marked: %d\n", node, (node->type & O_MARKED ? 1 : 0));
+    printf("[gc_collect] obj %p marked: %d\n", node, !!(node->type & O_MARKED));
     if (node->type & O_MARKED) {
       node->type &= ~O_MARKED;
     }
