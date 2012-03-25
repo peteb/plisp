@@ -1,4 +1,5 @@
 #include "gc.h"
+#include "object.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -6,7 +7,6 @@
 
 static object_t *roots[MAX_ROOTS] = {NULL};
 static unsigned num_roots = 0;
-static unsigned current_collect = 1;
 
 void
 gc_add_root(object_t *head) {
@@ -17,7 +17,7 @@ gc_add_root(object_t *head) {
 static void
 gc_mark(object_t *obj) {
   printf("marking %p\n", obj);
-  obj->last_mark = current_collect;
+  obj->type |= O_MARKED;
 
   /* recurse slots */
   slot_t *slot = obj->members;
@@ -35,13 +35,14 @@ gc_collect(object_t *node) {
 	gc_mark(roots[i]);
   }
 
-  printf("[gc_collect] current collection %d\n", current_collect);
-  
   while (node) {
-	printf("[gc_collect] obj %p last_mark %d\n", node, node->last_mark);
+	printf("[gc_collect] obj %p marked: %d\n", node, (node->type & O_MARKED ? 1 : 0));
+	if (node->type & O_MARKED) {
+	  node->type &= ~O_MARKED;
+	}
+	/* TODO: free here */
+	
 	node = node->prev;
   }
-
-  current_collect++;
 }
 
