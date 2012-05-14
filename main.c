@@ -10,16 +10,16 @@
 object_t *
 ENV_print(object_t *env, object_t *args) {
   if (!args) {
-	printf("no args :(\n");
-	return args;
+    printf("no args :(\n");
+    return args;
   }
   
   /* print SYMBOL */
   if (OBJ_TYPE(lst_first(args)) == O_SYMBOL) {
-	printf("%s\n", sym_get_text(lst_first(args)));
+    printf("%s\n", sym_get_text(lst_first(args)));
   }
   else {
-	obj_print(lst_first(args));
+    obj_print(lst_first(args));
   }
   return lst_first(args);
 }
@@ -45,8 +45,8 @@ ENV_if(object_t *env, object_t *args) {
   object_t *els = lst_first(lst_second(lst_second(args)));
 
   if (!truth || OBJ_TYPE(truth) == O_SYMBOL && strcmp(sym_get_text(truth), "f") == 0) {
-	/* NULL or 'f is false */
-	return (els ? eval(els, env) : sym_create("void", 1));
+    /* NULL or 'f is false */
+    return (els ? eval(els, env) : sym_create("void", 1));
   }
 
   /* everything else is true */
